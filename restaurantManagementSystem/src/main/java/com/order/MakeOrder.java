@@ -35,7 +35,7 @@ public class MakeOrder {
 
             orderDetails.add(orderItem);
           
-            System.out.println("Enter negative vaules to finish order");
+            System.out.println("Enter negative values to finish order");
             
         }
 		
@@ -44,14 +44,15 @@ public class MakeOrder {
 		if(!orderDetails.isEmpty()) {
 			System.out.println("Order has been placed please process the payment");
 			double totalAmount = calculateTotalPrice(menuItems,orderDetails);
-			System.out.println("\nTotal Amount : " + totalAmount);
 			insertOrderItems(connection ,orderDetails );
+		
+			System.out.println("Order Details:\n");
+	        for (OrderItem orderItem : orderDetails) {
+	            System.out.println(orderItem);
+	        }
 			
-			
-			
-			System.out.println(orderDetails);
-			
-			
+			System.out.println("\nTotal Amount : " + totalAmount);
+
 			Payment.paymentMethod(totalAmount);
 			
 		}

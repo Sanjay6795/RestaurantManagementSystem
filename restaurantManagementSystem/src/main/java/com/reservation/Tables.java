@@ -55,9 +55,7 @@ public class Tables {
         }
         int tableNo = maxId + 1;
 
-//        System.out.println("Enter Table Number:");
-//        int tableNo = scanner.nextInt();
-        scanner.nextLine(); 
+
         System.out.println("Enter Table Status:");
         String tableStatus = scanner.nextLine();
         
@@ -123,19 +121,25 @@ public class Tables {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-
+        	 System.out.println("************************************");
+             System.out.println("*        Table Information          *");
+             System.out.println("************************************");
+             System.out.println("TableNo\t\tPrice\tTableStatus\n");
+             
             while (resultSet.next()) {
+            	
                 int tableNo = resultSet.getInt("tableNo");
                 String tableStatus = resultSet.getString("tableStatus");
                 double price = resultSet.getDouble("price");
 
-                System.out.println("************************************");
-                System.out.println("*        Table Information          *");
-                System.out.println("************************************");
+            	System.out.println(tableNo+"\t\t"+price+"\t"+tableStatus);
+               /*
                 System.out.println("* TableNo: " + tableNo);
                 System.out.println("* TableStatus: " + tableStatus);
                 System.out.println("* Price: " + price);
-                System.out.println("************************************\n");            }
+              */
+            }
+            System.out.println("************************************\n");            
 
         } catch (SQLException e) {
             System.err.println("Database Error: " + e.getMessage());

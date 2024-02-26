@@ -5,8 +5,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.Exceptions.CityException;
 import com.Exceptions.ContactInvalidException;
 import com.Exceptions.EmailInvalid;
+import com.Exceptions.FirstNameException;
+import com.Exceptions.GenderException;
+import com.Exceptions.LastNameException;
 import com.Exceptions.UserNameInvalidException;
 import com.Exceptions.passwordInvalid;
 import com.order.MakeOrder;
@@ -35,16 +39,12 @@ public class Customer {
 
         String userName = getUserName(sc);
         String password = getValidPassword(sc);
-        System.out.println("Enter First Name:");
-        String firstName = sc.next();
-        System.out.println("Enter Last Name:");
-        String lastName = sc.next();
-        System.out.println("enter the gender (M -> Male | F -> Female):");
-        String gender = sc.next();
+        String firstName = getFirstName(sc);
+        String lastName = getLastName(sc);
+        String gender = getGender(sc);
         String email = getValidEmail(sc);
         String contactNumber = getValidContactNumber(sc);
-        System.out.println("enter the city");
-        String city = sc.next();
+        String city = getCity(sc);
         
         Connection conn = DriverManager.getConnection(url, dbuserName, dbPassword);
         String maxPersonIdQuery = "SELECT MAX(CustomerID) FROM DATABASE.customer";
@@ -76,72 +76,59 @@ public class Customer {
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
-            	
-            	System.out.println("Your customer Id is : "+customerid);
-            
+            	            
                 System.out.println("New Customer Registered Successfully.");
+            	System.out.println("Your customer Id is : "+customerid+"\n");
+            	
+
             } else {
                 System.out.println("Failed to register the new customer.");
             }
         } 
-        }catch (SQLException | passwordInvalid | UserNameInvalidException | EmailInvalid |ContactInvalidException e) {
-            System.out.println( e.getMessage());
-           // e.printStackTrace();
+   
+        }catch(Exception e) {    
+        	System.out.println( e.getMessage());
         }
+        
     }
 
-    private static String getValidEmail(Scanner sc) throws EmailInvalid{
+    private static String getValidEmail(Scanner sc) {
         while (true) {
         	System.out.println("Enter Email:");
             String email = sc.next();
+            try {
             if (isValidEmail(email)) {
                 return email;
-            } 
+            }
+            }catch(Exception e) {
+            	System.out.println(e.getMessage());
+            }
         }
     }
-
-    private static String getUserName(Scanner sc) throws UserNameInvalidException {
-    	while(true) {
-    		System.out.println("Enter the userName");
-    		String userName = sc.next();
-    		if(isValidUserName(userName)) {
-    			return userName;
-    		}
-    	}
-    	
-    }
-    private static String getValidPassword(Scanner sc) throws passwordInvalid {
-    	
-    		while (true) {
-            	System.out.println("password should be alphaNumeric character");
-            	System.out.println("Enter Password:");
-                String password = sc.next();
-                if (isValidPassword(password)) {
-                    return password;
-                } 
-                
-            }   
-    }
-
-    private static String getValidContactNumber(Scanner sc) throws ContactInvalidException{
-        System.out.println("Enter 10 digit contact number ,first digit must be greater than 5");
-        while (true) {
-        	System.out.println("Enter Contact Number:");
-            String contactNumber = sc.next();
-            if (isValidContactNumber(contactNumber)) {
-                return contactNumber;
-            } 
-        }
-    }
-
-
     private static boolean isValidEmail(String email) throws EmailInvalid {
         if(!email.matches( "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$")) {
         	throw new EmailInvalid("Invalid Email");
         }
        return true;
     }
+    
+    
 
+    private static String getUserName(Scanner sc)  {
+    	while(true) {
+    		System.out.println("Enter the userName");
+    		String userName = sc.next();
+    		try {
+    			if(isValidUserName(userName)) {
+    				return userName;
+    			}
+    		}
+    		catch(UserNameInvalidException e) {
+        	System.out.println(e.getMessage());
+    		}
+    	}
+    	
+    }
     private static boolean isValidUserName(String userName) throws UserNameInvalidException {
     	if(!userName.matches("^[a-zA-Z0-9_]+$")) {
     		throw new UserNameInvalidException("Invalid UserName");
@@ -149,22 +136,147 @@ public class Customer {
     	return true;
     }
     
+    
+    private static String getValidPassword(Scanner sc)  {
+    	
+    		while (true) {
+            	System.out.println("password should be alphaNumeric character");
+            	System.out.println("Enter Password:");
+                String password = sc.next(); 
+                try {
+                	if (isValidPassword(password)) {
+                		return password;
+                	} 
+                }catch(passwordInvalid e) {
+                	System.out.println(e.getMessage());
+                }
+                
+            }   
+    }
     private static boolean isValidPassword(String password) throws passwordInvalid {
     	if(!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()-+]).{8,}$")){
     		throw new passwordInvalid("Invalid Password");
     	}
         return true;
     }
+    
+    
+    
+    private static String getFirstName(Scanner sc) throws FirstNameException{
+    	while (true) {
+        	System.out.println("Enter First Name:");
+            String firstName = sc.next();
+            try {
+            if (isValidFirstName(firstName)) {
+                return firstName;
+            } 
+            }catch(FirstNameException e) {
+            	System.out.println(e.getMessage());
+            }
+        }
+    }
+    private static boolean isValidFirstName(String firstName) throws FirstNameException {
+        if(!firstName.matches( "^[A-Za-z]{1,20}$")) {
+        	throw new FirstNameException("Invalid FirstName");
+        }
+       return true;
+    }
+   
+    
+    private static String getLastName(Scanner sc) {
+    	while (true) {
+        	System.out.println("Enter Last Name:");
+            String lastName = sc.next();
+            try {
+            if (isValidLastName(lastName)) {
+                return lastName;
+            } 
+            }catch(LastNameException e) {
+            	System.out.println(e.getMessage());
+            }
+        }
+    }
+    private static boolean isValidLastName(String lastName) throws LastNameException {
+        if(!lastName.matches( "^[A-Za-z]{1,20}$")) {
+        	throw new LastNameException("Invalid LastName");
+        }
+       return true;
+    }
+   
+ 
+    private static String getValidContactNumber(Scanner sc) {
+        System.out.println("Enter 10 digit contact number ,first digit must be greater than 5");
+        while (true) {
+        	System.out.println("Enter Contact Number:");
+            String contactNumber = sc.next();
+            
+            try {
+            	if (isValidContactNumber(contactNumber)) {
+            		return contactNumber;
+            	} 
+            }catch(ContactInvalidException e) {
+            	System.out.println(e.getMessage());
 
+            }
+        }
+    }
+ 
     private static boolean isValidContactNumber(String contactNumber) throws ContactInvalidException{
          if(!contactNumber.matches("[6-9]\\d{9}")) {
         	 throw new ContactInvalidException("Invalid Contact Number");
          }
          return true;
     }
+  
+    
+    private static String getGender(Scanner sc) {
+    	while(true){
+    		System.out.println("enter the gender (M -> Male | F -> Female):");
+    		String gender = sc.next().toUpperCase();
+    		try {
+    			if(isValidGender(gender)) {
+        			return gender;
+    			}
+    		}catch(GenderException e){
+    			System.out.println(e.getMessage());	
+    		}
+    		
+    	}	
+    }
+    private static boolean isValidGender(String gender) throws GenderException{
+		if(!gender.matches("^[MF]$")) {
+			throw new GenderException("Invalid Gender");
+		}
+		return true;
+	}
 
-	
-    public static boolean login() {
+    private static String getCity(Scanner sc) throws CityException {
+        while (true) {
+            System.out.println("Enter City:");
+            String city = sc.next();
+            try {
+                if (isValidCity(city)) {
+                    return city;
+                }
+            } catch (CityException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private static boolean isValidCity(String city) throws CityException {
+        if (!city.matches("^[A-Za-z\\s]{1,50}$")) {
+            throw new CityException("Invalid City. city contains only alphabets");
+        }
+        return true;
+    }
+
+    
+    
+    
+    
+    
+	public static boolean login() {
     	
         System.out.println("Enter User Name:");
         String UserName = sc.next();

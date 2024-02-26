@@ -143,6 +143,8 @@ public class TableReservation {
                         
                         try {
                         	Bill.generateBill( connection ,reservationID, customerID, tableNumber,  price);
+                            System.out.println("Table Booking Successful.");
+
                         }
                         catch(Exception e){
                         	System.out.println(e.getMessage());
@@ -210,7 +212,7 @@ public class TableReservation {
 
         } catch (SQLException e) {
             System.err.println("Database Error: " + e.getMessage());
-            e.printStackTrace();
+           // e.printStackTrace();
             return false;
         }
     }
@@ -247,18 +249,24 @@ public class TableReservation {
 
     public  static void displayReservedTables(Connection connection) {
         // SQL query to select reserved tables
-        String selectReservedQuery = "SELECT ReservationID, TableNo FROM Reservation WHERE Status = 'reserved'";
+        String selectReservedQuery = "SELECT ReservationID, TableNo  FROM Reservation WHERE Status = 'reserved'";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(selectReservedQuery)) {
-
-            System.out.println("Reserved Tables:");
+        	 System.out.println("**********************************");
+             System.out.println("           Reserved Tables");
+             System.out.println("**********************************");
+             System.out.println("Reservation ID\t *\tTable No *");
+             System.out.println("**********************************");
 
             while (resultSet.next()) {
                 int reservationID = resultSet.getInt("ReservationID");
                 int tableNo = resultSet.getInt("TableNo");
-                System.out.println("Reservation ID: " + reservationID + ", Table No: " + tableNo);
+               // String date = resultSet.getString("ReservationDate");
+                System.out.println( reservationID + "\t\t* \t" + tableNo+"\t*");
+
             }
+            System.out.println("**********************************");
 
         } catch (SQLException e) {
             System.err.println("Database Error: " + e.getMessage());

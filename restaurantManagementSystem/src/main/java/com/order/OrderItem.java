@@ -9,12 +9,15 @@ public class OrderItem {
 		this.itemID = itemID;
 		this.quantity = quantity;
 	}
+	
+	/*
 	public int getOrderItemID() {
 		return orderItemID;
 	}
 	public void setOrderItemID(int orderItemID) {
 		this.orderItemID = orderItemID;
 	}
+	*/
 	public int getCustomerID() {
 		return customerID;
 	}
@@ -35,8 +38,9 @@ public class OrderItem {
 	}
 	@Override
 	public String toString() {
-		return "OrderItem [orderItemID=" + orderItemID + ", customerID=" + customerID + ", itemID=" + itemID
-				+ ", quantity=" + quantity + "]";
+		return "customerID=" + customerID + ", itemID=" + itemID
+				+ ", quantity=" + quantity+"\n";
 	}
 		
+	
 }

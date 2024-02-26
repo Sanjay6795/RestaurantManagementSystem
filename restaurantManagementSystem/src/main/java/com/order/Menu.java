@@ -78,9 +78,7 @@ public class Menu {
     public  static void addItem(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         try {
-//        System.out.println("Enter Item ID:");
-//        int itemID = scanner.nextInt();
-//        scanner.nextLine(); 
+
         System.out.println("Enter Item Name:");
         String itemName = scanner.nextLine();
         System.out.println("Enter Description:");
@@ -132,9 +130,7 @@ public class Menu {
             e.printStackTrace();
         }
     }
-    
-    
-    
+  
     public static void deleteItem(Connection connection) {
         Scanner scanner = new Scanner(System.in);
 
@@ -155,7 +151,7 @@ public class Menu {
             }
         } catch (SQLException e) {
             System.err.println("Database Error: " + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     
@@ -168,26 +164,23 @@ public class Menu {
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
                  ResultSet resultSet = preparedStatement.executeQuery()) {
+                System.out.println("***************************************************************************");
+                System.out.println("*                               Menu Information                          *");
+                System.out.println("***************************************************************************");
+                System.out.println("ItemID\tItemName\t\tPrice\tDescription");
+                System.out.println("***************************************************************************");
 
                 while (resultSet.next()) {
                     int itemID = resultSet.getInt("itemID");
                     String itemName = resultSet.getString("itemName");
                     String description = resultSet.getString("description");
                     double price = resultSet.getDouble("price");
-                    String category = resultSet.getString("category");
-                  //  int adminID = resultSet.getInt("adminID");
 
-                    System.out.println("************************************");
-                    System.out.println("*           Item Information        *");
-                    System.out.println("************************************");
-                    System.out.println("* ItemID: " + itemID);
-                    System.out.println("* ItemName: " + itemName);
-                    System.out.println("* Description: " + description);
-                    System.out.println("* Price: $" + price);
-                    System.out.println("************************************\n");
-
-                    System.out.println();
+                    System.out.println(itemID+"\t"+itemName+"\t\t"+price+"\t"+description);
+                    
                 }
+                System.out.println("***************************************************************************");
+
 
             } catch (SQLException | InputMismatchException e) {
                 System.err.println("Database Error: " + e.getMessage());

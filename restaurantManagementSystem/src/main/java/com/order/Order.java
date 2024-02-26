@@ -1,9 +1,9 @@
 package com.order;
 
-import java.math.BigDecimal;
-import java.util.Date;
 
 public class Order {
+	
+	/*
     private int orderID;
     private int customerID;
     private int tableNumber;
@@ -51,6 +51,6 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
-
+*/
   
 }

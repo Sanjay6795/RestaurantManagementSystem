@@ -24,19 +24,23 @@ public class SearchBy implements Searchable{
             preparedStatement.setString(1, searchCategory.toLowerCase()); // Convert to lowercase for case-insensitive search
 
             // Execute the query
+            
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            	System.out.println("***************************************************************");
+            	System.out.println("ItemID\tName\t\tPrice\tDescription");
+            	System.out.println("***************************************************************\n");
+
                 while (resultSet.next()) {
                     int itemID = resultSet.getInt("itemID");
                     String itemName = resultSet.getString("itemName");
                     String description = resultSet.getString("description");
                     double price = resultSet.getDouble("price");
                     String category = resultSet.getString("category");
-                   // int adminID = resultSet.getInt("adminID");
+				
+                    System.out.println(itemID+"\t"+itemName+"\t"+price+"\t"+description);
+                } 
+                System.out.println("***************************************************************\n");
 
-                    System.out.println("ItemID: " + itemID + ", ItemName: " + itemName +
-                            ", Description: " + description + ", Price: " + price +
-                            ", Category: " + category + "\n");
-                }
             }
         } catch (SQLException e) {
             System.err.println("Database Error: " + e.getMessage());
